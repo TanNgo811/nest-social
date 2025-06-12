@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+// Define the gRPC package name
+package post;
+
+// Define the gRPC service for post operations
+service PostService {
+  // RPC method for creating a new post
+  rpc CreatePost (CreatePostRequest) returns (PostResponse);
+  // RPC method for retrieving a single post by ID
+  rpc GetPost (GetPostRequest) returns (PostResponse);
+  // RPC method for retrieving a list of posts
+  rpc GetPosts (GetPostsRequest) returns (GetPostsResponse);
+  // RPC method for updating an existing post
+  rpc UpdatePost (UpdatePostRequest) returns (PostResponse);
+  // RPC method for deleting a post by ID
+  rpc DeletePost (DeletePostRequest) returns (DeletePostResponse);
+}
+
+// Message representing a Post entity
+message Post {
+  string id = 1;         // Unique ID of the post
+  string userId = 2;     // ID of the user who created the post
+  string title = 3;      // Title of the post
+  string content = 4;    // Content of the post
+  string createdAt = 5;  // Timestamp of post creation (ISO 8601 string)
+  string updatedAt = 6;  // Timestamp of last update (ISO 8601 string)
+}
+
+// Message representing the request to create a post
+message CreatePostRequest {
+  string userId = 1;  // ID of the user creating the post
+  string title = 2;   // Title of the new post
+  string content = 3; // Content of the new post
+}
+
+// Message representing the request to get a single post
+message GetPostRequest {
+  string id = 1; // ID of the post to retrieve
+}
+
+// Message representing the request to get multiple posts
+message GetPostsRequest {
+  int32 limit = 1;  // Maximum number of posts to return (for pagination)
+  int32 offset = 2; // Number of posts to skip (for pagination)
+}
+
+// Message representing the response containing multiple posts
+message GetPostsResponse {
+  repeated Post posts = 1; // List of Post messages
+}
+
+// Message representing the request to update a post
+message UpdatePostRequest {
+  string id = 1;      // ID of the post to update
+  string title = 2;   // New title for the post (optional)
+  string content = 3; // New content for the post (optional)
+}
+
+// Message representing the request to delete a post
+message DeletePostRequest {
+  string id = 1; // ID of the post to delete
+}
+
+// Message representing the response after a delete post attempt
+message DeletePostResponse {
+  bool success = 1;   // True if deletion was successful, false otherwise
+  string message = 2; // A descriptive message about the deletion status
+}
+
+// Message representing the response for single post operations (create, get, update)
+message PostResponse {
+  Post post = 1;     // The Post object (if successful)
+  bool success = 2;  // True if the operation was successful, false otherwise
+  string message = 3; // A descriptive message about the operation status
+}

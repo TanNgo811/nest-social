@@ -1,0 +1,72 @@
+# Version of the Docker Compose file format
+version: '3.8'
+
+# Define the services (containers) that make up your application
+services:
+  # PostgreSQL database service
+  postgres:
+    image: postgres:13 # Use PostgreSQL version 13 image
+    restart: always    # Always restart the container if it stops
+    environment:       # Environment variables for PostgreSQL configuration
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: social_media
+    ports:             # Map container port 5432 to host port 5432
+      - "5432:5432"
+    volumes:           # Persist database data to a named volume
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:       # Health check to ensure PostgreSQL is ready before other services start
+      test: ["CMD-SHELL", "pg_isready -U user -d social_media"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Authentication Microservice
+  auth-service:
+    build: ./auth-service # Build from the Dockerfile in the auth-service directory
+    ports:
+      - "5000:5000" # Map container port 5000 (gRPC) to host port 5000
+    environment:       # Environment variables for the auth-service
+      DB_HOST: postgres   # Hostname for the database (service name in Docker network)
+      DB_PORT: 5432
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_DATABASE: social_media
+      JWT_SECRET: your_super_secret_jwt_key_please_change_me # IMPORTANT: Use a strong, unique secret
+    depends_on:        # Ensure postgres is healthy before starting auth-service
+      postgres:
+        condition: service_healthy
+
+  # Post Microservice
+  post-service:
+    build: ./post-service # Build from the Dockerfile in the post-service directory
+    ports:
+      - "5001:5001" # Map container port 5001 (gRPC) to host port 5001
+    environment:       # Environment variables for the post-service
+      DB_HOST: postgres   # Hostname for the database (service name in Docker network)
+      DB_PORT: 5432
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_DATABASE: social_media
+    depends_on:        # Ensure postgres is healthy before starting post-service
+      postgres:
+        condition: service_healthy
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway # Build from the Dockerfile in the api-gateway directory
+    ports:
+      - "3000:3000" # Map container port 3000 (HTTP/REST) to host port 3000
+    environment:       # Environment variables for the api-gateway
+      PORT: 3000
+      AUTH_SERVICE_URL: auth-service:5000 # gRPC address of the auth-service container
+      POST_SERVICE_URL: post-service:5001 # gRPC address of the post-service container
+    depends_on:        # Ensure auth-service and post-service are running before api-gateway
+      auth-service:
+        condition: service_started
+      post-service:
+        condition: service_started
+
+# Define named volumes for data persistence
+volumes:
+  pg_data: # Volume for PostgreSQL data

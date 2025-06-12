@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+// Define the gRPC package name
+package auth;
+
+// Define the gRPC service for authentication operations
+service AuthService {
+  // RPC method for user registration
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  // RPC method for user login
+  rpc Login (LoginRequest) returns (LoginResponse);
+  // RPC method for validating an authentication token
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+}
+
+// Message representing the request for user registration
+message RegisterRequest {
+  string username = 1; // User's desired username
+  string email = 2;    // User's email address
+  string password = 3; // User's password (will be hashed)
+}
+
+// Message representing the response after a registration attempt
+message RegisterResponse {
+  string message = 1; // A descriptive message about the registration status
+  string userId = 2;  // The ID of the newly registered user (if successful)
+  bool success = 3;   // True if registration was successful, false otherwise
+}
+
+// Message representing the request for user login
+message LoginRequest {
+  string email = 1;    // User's email address for login
+  string password = 2; // User's password for login
+}
+
+// Message representing the response after a login attempt
+message LoginResponse {
+  string accessToken = 1; // The JWT access token (if login successful)
+  bool success = 2;       // True if login was successful, false otherwise
+  string message = 3;     // A descriptive message about the login status
+}
+
+// Message representing the request for token validation
+message ValidateTokenRequest {
+  string accessToken = 1; // The JWT access token to be validated
+}
+
+// Message representing the response after a token validation attempt
+message ValidateTokenResponse {
+  string userId = 1; // The ID of the user associated with the token (if valid)
+  bool isValid = 2;  // True if the token is valid, false otherwise
+}
