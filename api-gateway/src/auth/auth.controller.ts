@@ -27,6 +27,8 @@ export class AuthController {
       // For now, a generic 500 or 409 will suffice depending on the message
       throw new Error(result.message); // This will be caught by NestJS and return a 500 if not handled
     }
+    
+    
     return { success: result.success, message: result.message, accessToken: result.accessToken, userId: result.userId };
   }
 

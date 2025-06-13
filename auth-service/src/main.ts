@@ -16,7 +16,7 @@ async function bootstrap() {
         // Name of the gRPC package defined in the .proto file
         package: 'auth',
         // Address where the gRPC server will listen
-        url: '0.0.0.0:5000',
+        url: '0.0.0.0:5010',
         // Optional: Load all gRPC methods, even those not explicitly defined in the service
         loader: {
           keepCase: true,
@@ -30,6 +30,6 @@ async function bootstrap() {
   );
   // Start the microservice
   await app.listen();
-  console.log('Auth Microservice is listening on port 5000 (gRPC)');
+  console.log('Auth Microservice is listening on port 5010 (gRPC)');
 }
 bootstrap()

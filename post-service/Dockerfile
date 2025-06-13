@@ -18,7 +18,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port where the gRPC server will be listening
-EXPOSE 5001
+EXPOSE 5011
 
 # Command to run the compiled application
 CMD ["node", "dist/main"]

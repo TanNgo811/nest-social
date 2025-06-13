@@ -16,7 +16,7 @@ async function bootstrap() {
         // Name of the gRPC package defined in the .proto file
         package: 'post',
         // Address where the gRPC server will listen
-        url: '0.0.0.0:5001', // Unique port for post-service
+        url: '0.0.0.0:5011', // Unique port for post-service
         // Optional: Load all gRPC methods, even those not explicitly defined in the service
         loader: {
           keepCase: true,
@@ -30,6 +30,6 @@ async function bootstrap() {
   );
   // Start the microservice
   await app.listen();
-  console.log('Post Microservice is listening on port 5001 (gRPC)');
+  console.log('Post Microservice is listening on port 5011 (gRPC)');
 }
 bootstrap();

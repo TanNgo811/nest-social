@@ -14,7 +14,7 @@ import { PostService } from './post/post.service';
         name: 'AUTH_SERVICE', // Token to inject the client
         transport: Transport.GRPC,
         options: {
-          url: process.env.AUTH_SERVICE_URL || 'auth-service:5000', // Connect to auth-service container
+          url: process.env.AUTH_SERVICE_URL || 'auth-service:5010', // Connect to auth-service container
           protoPath: join(__dirname, '../proto/auth.proto'),
           package: 'auth',
           loader: {
@@ -30,7 +30,7 @@ import { PostService } from './post/post.service';
         name: 'POST_SERVICE', // Token to inject the client
         transport: Transport.GRPC,
         options: {
-          url: process.env.POST_SERVICE_URL || 'post-service:5001', // Connect to post-service container
+          url: process.env.POST_SERVICE_URL || 'post-service:5011', // Connect to post-service container
           protoPath: join(__dirname, '../proto/post.proto'),
           package: 'post',
           loader: {

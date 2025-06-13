@@ -21,7 +21,7 @@ COPY . .
 RUN NODE_OPTIONS="--experimental-specifier-resolution=node" npm run build
 
 # Expose the port where the gRPC server will be listening
-EXPOSE 5000
+EXPOSE 5010
 
 # Command to run the compiled application
 CMD ["node", "dist/main"]

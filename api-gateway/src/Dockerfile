@@ -18,7 +18,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port where the REST API will be listening
-EXPOSE 3000
+EXPOSE 3012
 
 # Command to run the compiled application
 CMD ["node", "dist/main"]

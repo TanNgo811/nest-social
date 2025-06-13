@@ -53,7 +53,7 @@ export interface DeletePostResponse {
 }
 
 export interface PostResponse {
-  post: Post | null;
+  post: Post;
   success: boolean;
   message: string;
 }

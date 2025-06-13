@@ -48,7 +48,10 @@ export class PostController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async createPost(@Body() createPostDto: CreatePostDto, @Req() req: Request): Promise<PostResponseDto> {
-    const userId = req.user.userId; // Get userId from the authenticated request
+    const userId = req?.user?.userId; // Get userId from the authenticated request
+    if (!userId) {
+      throw new Error('User not authenticated'); // Should be a UnauthorizedException in production
+    }
     const result = await this.postService.createPost({ ...createPostDto, userId });
     if (!result.success) {
       throw new Error(result.message);

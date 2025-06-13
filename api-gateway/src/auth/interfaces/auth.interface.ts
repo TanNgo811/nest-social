@@ -17,6 +17,7 @@ export interface RegisterResponse {
   message: string;
   userId: string;
   success: boolean;
+  accessToken?: string; // Optional, included if registration is successful and token is generated
 }
 
 export interface LoginRequest {
@@ -28,6 +29,7 @@ export interface LoginResponse {
   accessToken: string;
   success: boolean;
   message: string;
+  userId?: string; // Optional, included if login is successful and user ID is returned
 }
 
 export interface ValidateTokenRequest {
